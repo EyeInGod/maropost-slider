@@ -1,0 +1,19 @@
+<div id="maropost-slider"></div>
+
+<script>
+    MaropostSlider.createSlider({
+        element: "#maropost-slider",
+        range: true,
+        min: 0,
+        max: 100,
+        values: [0, 75],
+        onChange: function(values) {
+            $("#minValue").text(values[0]);
+            $("#maxValue").text(values[1]);
+            trackSliderValues(values[0], values[1]); // Call the Maropost tracking function with the updated values
+        }
+    });
+
+    $("#minValue").text(MaropostSlider.getSliderValue("#maropost-slider", 0));
+    $("#maxValue").text(MaropostSlider.getSliderValue("#maropost-slider", 1));
+</script>

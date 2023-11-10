@@ -1,0 +1,27 @@
+<!-- Include Maropost tracking code -->
+<script>
+    // Initialize the range slider
+    maropost.trackEvent("slider1_init", {
+        range: true, // Enable range selection
+        min: 0, // Minimum value
+        max: 100, // Maximum value
+        values: [0, 75] // Initial values for the handles
+    });
+
+    // Event handler for when the slider is moved
+    $("#slider1").on("slide", function(event, ui) {
+        // Update the values of the handles
+        $("#minValue").text(ui.values[0]);
+        $("#maxValue").text(ui.values[1]);
+
+        // Track the slider values
+        maropost.trackEvent("slider1_slide", {
+            min: ui.values[0],
+            max: ui.values[1]
+        });
+    });
+
+    // Display the initial values of the handles
+    $("#minValue").text($("#slider1").slider("values", 0));
+    $("#maxValue").text($("#slider1").slider("values", 1));
+</script>

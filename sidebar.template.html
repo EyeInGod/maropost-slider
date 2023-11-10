@@ -1,0 +1,71 @@
+[%product_filter type:'width' limit:'6'%]
+	[%param header%]
+		<div class="list-group-item d-block d-sm-none">
+			<a href="javascript:;" onclick="$(this).children('i').toggleClass('fa-plus fa-minus')" class="list-group-item mb-0 p-0 text-left w-100 d-flex align-items-center justify-content-between" data-toggle="collapse" data-target="#fbWidthRange">Filter By Width Range<i class="fa fa-plus float-right"></i></a>
+		</div>
+		<div class="collapse" id="fbPriceRange">
+	[%/param%]
+	[%param *body%]
+		[%if [@selected@]%]
+			<a class="filter-remove list-group-item d-l-none d-xl-none d-flex justify-content-between align-items-center" href="[@remove_url@]" class="list-group-item" rel="nofollow">
+				<span class="h5"><i class="fa fa-check-square"></i> [@name@]</span>
+				<span class="badge badge-secondary badge-pill">[@total@]</span>
+			</a>
+		[%else%]
+			[%if [@min@] == 0 AND [@max@] > 0%]
+				<a class="text-dark border-0 filter list-group-item d-l-none d-xl-none" href="[@url@]" rel="nofollow"><i class="far fa-square"></i> [%format type:'currency' dp:'0'%][@max@][%/format%] or below</a>
+			[%elseif [@min@] > 0 AND [@max@] > 0%]
+				<a class="text-dark border-0 filter list-group-item d-l-none d-xl-none" href="[@url@]" rel="nofollow"><i class="far fa-square"></i> [%format type:'currency' dp:'0'%][@min@][%/format%] to [%format type:'currency' dp:'0'%][@max@][%/format%]</a>
+			[%elseif [@max@] == 0%]
+				<a class="text-dark border-0 filter list-group-item d-l-none d-xl-none" href="[@url@]" rel="nofollow"><i class="far fa-square"></i> [%format type:'currency' dp:'0'%][@min@][%/format%] or above</a>
+			[%/if%]
+		[%/if%]
+	[%/param%]
+	[%param *footer%]
+		</div>
+	[%/param%]
+[%/product_filter%]
+[%product_filter type:'price' limit:'1'%]
+	[%param header%]
+		<div class="list-group-item d-none d-sm-block">
+			<a href="javascript:;" onclick="$(this).children('i').toggleClass('fa-plus fa-minus')" class="list-group-item mb-0 p-0 text-left w-100 d-flex align-items-center justify-content-between" data-toggle="collapse" data-target="#fbPriceRangeDesc">Filter By Price Range<i class="fa fa-plus float-right"></i></a>
+		</div>
+		<div class="collapse" id="fbPriceRangeDesc">
+	[%/param%]
+	[%param *body%]
+		[%SITE_VALUE id:'footer_javascript'%]
+			<script>
+				$(function() {
+					var vals = ['[@min@]','[@max@]'];
+					for(var i=0; i<vals.length; i++) { vals[i]=parseInt(vals[i]); }
+					$('#price-range').slider({
+						range: true,
+						min: vals[0],
+						max: vals[1],
+						values: vals,
+						slide: function( event, ui ) {
+							$('#price-range-text').html('[@config:currency_symbol@]'+ui.values[0]+' to [@config:currency_symbol@]'+ui.values[1]);
+							$('#pricesearch input[name="pr"]').val( ui.values[0]+'-'+ui.values[1] );
+						},
+						create: function( event, ui ) {
+							$('#price-range-text').html('[@config:currency_symbol@]'+vals[0]+' to [@config:currency_symbol@]'+vals[1]);
+							$('#pricesearch input[name="pr"]').val( vals[0]+'-'+vals[1] );
+						}
+					});
+				});
+			</script>
+		[%/SITE_VALUE%]
+		<div class="list-group-item hidden-sm d-none d-sm-block">
+			<p id="price-range"></p><p id="price-range-text" class="price_range"></p>
+			<form id="pricesearch" method="get" action="[@config:current_url@]">
+				<input type="hidden" name="rf" value="[%FILTER_CODE id:'price'%][%/FILTER_CODE%]">
+				<input  name="pr" type="hidden" value="">
+				<input type="submit" value="Filter By Price" class="btn btn-outline-secondary btn-sm" />
+				<a href="[@remove_url@]" class="btn btn-outline-secondary btn-sm" rel="nofollow"> Clear</a>
+			</form>
+		</div>
+	[%/param%]
+	[%param *footer%]
+	</div>
+	[%/param%]
+[%/product_filter%]
